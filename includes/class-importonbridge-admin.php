@@ -344,6 +344,8 @@ final class ImportonBridge_Admin {
 			var REQ_TYPE = 'IMPORTONBRIDGE_URL_IMPORT_BRIDGE_REQUEST';
 			var RES_TYPE = 'IMPORTONBRIDGE_URL_IMPORT_BRIDGE_RESPONSE';
 			var bridgeReady = false;
+			var lastCategories = [];
+			var restoringNow = false;
 
 			function qs(id) { return document.getElementById(id); }
 
@@ -488,6 +490,9 @@ final class ImportonBridge_Admin {
 
 			qs('importonbridge-modal-ok-btn') && qs('importonbridge-modal-ok-btn').addEventListener('click', function() {
 				closeModal();
+				if (stored(CONNECTED_KEY)) {
+					setUI(true, bridgeReady ? 'Connected and ready.' : 'Connected to WordPress — waiting for browser extension...', lastCategories);
+				}
 			});
 
 			// ── showMain (was missing) ────────────────────────────────────────
@@ -540,6 +545,7 @@ final class ImportonBridge_Admin {
 			}
 
 			function setUI(ok, msg, cats) {
+				lastCategories = cats || [];
 				var badge = qs('importonbridge-connection-badge');
 				var status = qs('importonbridge-connection-status');
 				var dot = qs('importonbridge-status-dot');
@@ -577,7 +583,6 @@ final class ImportonBridge_Admin {
 				if (status) {
 					status.textContent = msg || (fullyConnected ? 'Connected and ready.' : ok ? 'Connected to WordPress. Install the browser extension to complete setup.' : 'Disconnected.');
 					status.style.color = fullyConnected ? '#059669' : ok ? '#d97706' : '#64748b';
-				}
 				}
 				if (extStatus) {
 					extStatus.textContent = bridgeReady ? 'Detected' : 'Not detected';
@@ -656,6 +661,8 @@ final class ImportonBridge_Admin {
 			// Uses /ping — does NOT create a new app password (unlike /init-bridge)
 			// Shows "Connected" only when the extension is actually detected.
 			async function restoreConnection() {
+				if (restoringNow) return true;
+				restoringNow = true;
 				try {
 					var data = await apiGet('ping');
 					if (data && data.ok) {
@@ -667,6 +674,8 @@ final class ImportonBridge_Admin {
 				} catch (e) {
 					setUI(false, 'Disconnected.', []);
 					return false;
+				} finally {
+					restoringNow = false;
 				}
 			}
 
@@ -680,9 +689,7 @@ final class ImportonBridge_Admin {
 					setStep('init', 'active', 'Initializing connection', 'Contacting the WordPress REST API...');
 					setStep('init', 'done', 'Initializing connection', 'Connected to REST API.');
 
-					var passwordExists = false;
-					if (!qs('step-badge-app_password')) {} // noop
-					setStep('app_password', 'active', 'Application password', 'Checking existing credentials...');
+					setStep('app_password', 'active', 'Application password', 'Generating secure credentials...');
 
 					var data = await apiPost('init-bridge');
 
@@ -693,12 +700,7 @@ final class ImportonBridge_Admin {
 						return false;
 					}
 
-					if (data.password_exists) {
-						passwordExists = true;
-						setStep('app_password', 'done', 'Application password', 'Existing credentials found.');
-					} else {
-						setStep('app_password', 'done', 'Application password created', 'Secure credentials generated successfully.');
-					}
+					setStep('app_password', 'done', 'Application password created', 'Secure credentials generated successfully.');
 
 					var extensionReached = false;
 
@@ -821,7 +823,10 @@ final class ImportonBridge_Admin {
 			if (stored(DOWNLOAD_KEY)) {
 				showMain();
 				if (stored(CONNECTED_KEY)) {
-					setUI(false, 'Checking connection...', []);
+					var s = qs('importonbridge-connection-status');
+					var b = qs('importonbridge-connection-badge');
+					if (b) b.textContent = 'Checking...';
+					if (s) s.textContent = 'Checking connection...';
 					restoreConnection();
 				} else {
 					setUI(false, 'Disconnected. Click Connect to start.', []);

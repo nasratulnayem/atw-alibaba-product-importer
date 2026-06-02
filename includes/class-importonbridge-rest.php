@@ -449,22 +449,16 @@ final class ImportonBridge_Rest {
 			$password_exists = false;
 			if ( class_exists( 'WP_Application_Passwords' ) ) {
 				$existing = WP_Application_Passwords::get_user_application_passwords( (int) $user->ID );
-				$found = '';
 				if ( is_array( $existing ) ) {
 					foreach ( $existing as $pw ) {
-						if ( isset( $pw['name'] ) && $pw['name'] === 'importon-bridge' ) {
-							$found = $pw;
-							break;
+						if ( isset( $pw['name'] ) && $pw['name'] === 'importon-bridge' && isset( $pw['uuid'] ) ) {
+							WP_Application_Passwords::delete_application_password( (int) $user->ID, $pw['uuid'] );
 						}
 					}
 				}
-				if ( $found ) {
-					$password_exists = true;
-				} else {
-					$created = WP_Application_Passwords::create_new_application_password( (int) $user->ID, array( 'name' => 'importon-bridge' ) );
-					if ( is_array( $created ) && isset( $created[0] ) && is_string( $created[0] ) ) {
-						$app_password = $created[0];
-					}
+				$created = WP_Application_Passwords::create_new_application_password( (int) $user->ID, array( 'name' => 'importon-bridge' ) );
+				if ( is_array( $created ) && isset( $created[0] ) && is_string( $created[0] ) ) {
+					$app_password = $created[0];
 				}
 			}
 

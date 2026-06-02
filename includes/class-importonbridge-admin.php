@@ -599,6 +599,7 @@ final class ImportonBridge_Admin {
 
 				renderChips(cats || []);
 				store(CONNECTED_KEY, !!ok);
+				if (ok) store(DOWNLOAD_KEY, true);
 			}
 
 			function postToBridge(cmd, payload) {

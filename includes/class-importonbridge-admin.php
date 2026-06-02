@@ -430,6 +430,9 @@ final class ImportonBridge_Admin {
 				} else if (state === 'done') {
 					stepEl.classList.add('importonbridge-step--done');
 					if (badge) badge.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+				} else if (state === 'warning') {
+					stepEl.classList.add('importonbridge-step--warning');
+					if (badge) badge.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
 				} else if (state === 'error') {
 					stepEl.classList.add('importonbridge-step--error');
 					if (badge) badge.textContent = '!';
@@ -462,6 +465,15 @@ final class ImportonBridge_Admin {
 				var footer = qs('importonbridge-modal-footer');
 				if (icon) icon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
 				if (title) title.textContent = 'Connected Successfully';
+				if (footer) footer.style.display = 'flex';
+			}
+
+			function showModalWarning() {
+				var icon = qs('importonbridge-modal-icon');
+				var title = qs('importonbridge-modal-title');
+				var footer = qs('importonbridge-modal-footer');
+				if (icon) icon.innerHTML = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+				if (title) title.textContent = 'Waiting for browser extension';
 				if (footer) footer.style.display = 'flex';
 			}
 
@@ -536,17 +548,36 @@ final class ImportonBridge_Admin {
 				var reconnectBtn = qs('importonbridge-reconnect-btn');
 				var disconnectBtn = qs('importonbridge-disconnect-btn');
 
+				var fullyConnected = ok && bridgeReady;
+
 				if (badge) {
-					badge.textContent = ok ? 'Connected' : 'Disconnected';
-					badge.style.color = ok ? '#059669' : '#64748b';
+					if (fullyConnected) {
+						badge.textContent = 'Connected';
+						badge.style.color = '#059669';
+					} else if (ok) {
+						badge.textContent = 'Waiting for extension';
+						badge.style.color = '#d97706';
+					} else {
+						badge.textContent = 'Disconnected';
+						badge.style.color = '#64748b';
+					}
 				}
 				if (dot) {
-					dot.style.background = ok ? '#22c55e' : '#94a3b8';
-					dot.style.boxShadow = ok ? '0 0 0 3px rgba(34,197,94,0.2)' : 'none';
+					if (fullyConnected) {
+						dot.style.background = '#22c55e';
+						dot.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.2)';
+					} else if (ok) {
+						dot.style.background = '#d97706';
+						dot.style.boxShadow = '0 0 0 3px rgba(217,119,6,0.2)';
+					} else {
+						dot.style.background = '#94a3b8';
+						dot.style.boxShadow = 'none';
+					}
 				}
 				if (status) {
-					status.textContent = msg || (ok ? 'Connected and ready.' : 'Disconnected.');
-					status.style.color = ok ? '#059669' : '#64748b';
+					status.textContent = msg || (fullyConnected ? 'Connected and ready.' : ok ? 'Connected to WordPress. Install the browser extension to complete setup.' : 'Disconnected.');
+					status.style.color = fullyConnected ? '#059669' : ok ? '#d97706' : '#64748b';
+				}
 				}
 				if (extStatus) {
 					extStatus.textContent = bridgeReady ? 'Detected' : 'Not detected';
@@ -622,16 +653,13 @@ final class ImportonBridge_Admin {
 			}
 
 			// ── Silent restore (page load, no modal) ───────────────────────────
+			// Uses /ping — does NOT create a new app password (unlike /init-bridge)
 			// Shows "Connected" only when the extension is actually detected.
 			async function restoreConnection() {
 				try {
 					var data = await apiGet('ping');
 					if (data && data.ok) {
-						if (bridgeReady) {
-							setUI(true, 'Connected as ' + data.user_login, data.categories || []);
-						} else {
-							setUI(false, 'Waiting for browser extension...', []);
-						}
+						setUI(true, 'Connected to WordPress — ' + (bridgeReady ? 'ready.' : 'waiting for browser extension...'), data.categories || []);
 						return true;
 					}
 					setUI(false, 'Disconnected. Click Connect to start.', []);
@@ -651,7 +679,10 @@ final class ImportonBridge_Admin {
 				try {
 					setStep('init', 'active', 'Initializing connection', 'Contacting the WordPress REST API...');
 					setStep('init', 'done', 'Initializing connection', 'Connected to REST API.');
-					setStep('app_password', 'active', 'Creating application password', 'Generating secure credentials for the browser extension...');
+
+					var passwordExists = false;
+					if (!qs('step-badge-app_password')) {} // noop
+					setStep('app_password', 'active', 'Application password', 'Checking existing credentials...');
 
 					var data = await apiPost('init-bridge');
 
@@ -662,29 +693,45 @@ final class ImportonBridge_Admin {
 						return false;
 					}
 
-					setStep('app_password', 'done', 'Application password created', 'Secure credentials generated successfully.');
+					if (data.password_exists) {
+						passwordExists = true;
+						setStep('app_password', 'done', 'Application password', 'Existing credentials found.');
+					} else {
+						setStep('app_password', 'done', 'Application password created', 'Secure credentials generated successfully.');
+					}
 
-					if (bridgeReady && data.app_password) {
+					var extensionReached = false;
+
+					if (bridgeReady) {
 						setStep('bridge', 'active', 'Connecting to browser extension', 'Sending credentials to the browser companion...');
 						try {
-							await postToBridge('connect_bridge', {
+							var payload = {
 								wpBaseUrl: data.site_url,
-								wpUser: data.username,
-								wpAppPassword: data.app_password
-							});
+								wpUser: data.username
+							};
+							if (data.app_password) {
+								payload.wpAppPassword = data.app_password;
+							}
+							await postToBridge('connect_bridge', payload);
+							extensionReached = true;
 							setStep('bridge', 'done', 'Browser extension connected', 'Credentials sent successfully.');
 						} catch (e) {
-							setStep('bridge', 'done', 'Extension bridge setup', 'Extension not detected — will connect automatically when available.');
+							setStep('bridge', 'warning', 'Browser extension', 'Extension not detected. Connection will resume when the extension is active.');
 						}
 					} else {
-						setStep('bridge', 'done', 'Browser extension', 'Extension not detected. Connection will resume when the extension is active.');
+						setStep('bridge', 'warning', 'Browser extension', 'Extension not detected. Connection will resume when the extension is active.');
 					}
 
 					setStep('categories', 'active', 'Fetching categories', 'Loading WooCommerce product categories...');
 					setStep('categories', 'done', 'Categories loaded', (data.categories ? data.categories.length : 0) + ' product categories found.');
 
-					showModalSuccess();
-					setUI(true, 'Connected as ' + data.username, data.categories || []);
+					if (extensionReached) {
+						showModalSuccess();
+						setUI(true, 'Connected as ' + data.username, data.categories || []);
+					} else {
+						showModalWarning();
+						setUI(true, 'Connected to WordPress — waiting for browser extension...', data.categories || []);
+					}
 					return true;
 
 				} catch (e) {
@@ -763,6 +810,8 @@ final class ImportonBridge_Admin {
 					showMain();
 					if (stored(CONNECTED_KEY)) {
 						restoreConnection();
+					} else {
+						setUI(false, 'Disconnected. Click Connect to start.', []);
 					}
 				}
 			});
@@ -1660,11 +1709,13 @@ final class ImportonBridge_Admin {
 				'.importonbridge-step { display: grid; grid-template-columns: 32px 1fr; gap: 12px; padding: 12px 14px; border-radius: 10px; background: #f9fafb; border: 1px solid #f0f0f0; transition: all 0.3s ease; }',
 				'.importonbridge-step--active { background: #eff6ff; border-color: #bfdbfe; box-shadow: 0 0 0 1px #93c5fd; }',
 				'.importonbridge-step--done { background: #f0fdf4; border-color: #bbf7d0; }',
+				'.importonbridge-step--warning { background: #fffbeb; border-color: #fde68a; }',
 				'.importonbridge-step--error { background: #fef2f2; border-color: #fecaca; }',
 				'.importonbridge-step--pending { opacity: 0.6; }',
 				'.importonbridge-step-badge { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 13px; font-weight: 700; color: #fff; background: #d1d5db; transition: all 0.3s ease; flex: 0 0 auto; }',
 				'.importonbridge-step--active .importonbridge-step-badge { background: #2563eb; box-shadow: 0 0 0 4px rgba(37,99,235,0.2); }',
 				'.importonbridge-step--done .importonbridge-step-badge { background: #16a34a; }',
+				'.importonbridge-step--warning .importonbridge-step-badge { background: #d97706; }',
 				'.importonbridge-step--error .importonbridge-step-badge { background: #dc2626; }',
 				'.importonbridge-step-content { min-width: 0; display: grid; gap: 2px; }',
 				'.importonbridge-step-title { font-size: 13px; font-weight: 600; color: #111827; }',

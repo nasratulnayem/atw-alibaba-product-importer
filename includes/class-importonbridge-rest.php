@@ -445,7 +445,8 @@ final class ImportonBridge_Rest {
 			$user     = wp_get_current_user();
 			$site_url = rtrim( home_url( '/' ), '/' );
 
-			$app_password = '';
+			$app_password    = '';
+			$password_exists = false;
 			if ( class_exists( 'WP_Application_Passwords' ) ) {
 				$existing = WP_Application_Passwords::get_user_application_passwords( (int) $user->ID );
 				$found = '';
@@ -458,11 +459,12 @@ final class ImportonBridge_Rest {
 					}
 				}
 				if ( $found ) {
-					WP_Application_Passwords::delete_application_password( (int) $user->ID, $found['uuid'] );
-				}
-				$created = WP_Application_Passwords::create_new_application_password( (int) $user->ID, array( 'name' => 'importon-bridge' ) );
-				if ( is_array( $created ) && isset( $created[0] ) && is_string( $created[0] ) ) {
-					$app_password = $created[0];
+					$password_exists = true;
+				} else {
+					$created = WP_Application_Passwords::create_new_application_password( (int) $user->ID, array( 'name' => 'importon-bridge' ) );
+					if ( is_array( $created ) && isset( $created[0] ) && is_string( $created[0] ) ) {
+						$app_password = $created[0];
+					}
 				}
 			}
 
@@ -477,6 +479,7 @@ final class ImportonBridge_Rest {
 					'site_url'       => $site_url,
 					'username'       => (string) $user->user_login,
 					'app_password'   => $app_password,
+					'password_exists' => $password_exists,
 					'categories'     => $categories,
 				),
 				200

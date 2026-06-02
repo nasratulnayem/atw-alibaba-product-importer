@@ -491,7 +491,7 @@ final class ImportonBridge_Admin {
 			qs('importonbridge-modal-ok-btn') && qs('importonbridge-modal-ok-btn').addEventListener('click', function() {
 				closeModal();
 				if (stored(CONNECTED_KEY)) {
-					setUI(true, bridgeReady ? 'Connected and ready.' : 'Connected to WordPress — waiting for browser extension...', lastCategories);
+					setUI(true, 'Connected to WordPress \u2014 ready.', lastCategories);
 				}
 			});
 
@@ -581,11 +581,11 @@ final class ImportonBridge_Admin {
 					}
 				}
 				if (status) {
-					status.textContent = msg || (fullyConnected ? 'Connected and ready.' : ok ? 'Connected to WordPress. Install the browser extension to complete setup.' : 'Disconnected.');
+					status.textContent = msg || (ok ? 'Connected to WordPress \u2014 ready.' : 'Disconnected.');
 					status.style.color = fullyConnected ? '#059669' : ok ? '#d97706' : '#64748b';
 				}
 				if (extStatus) {
-					extStatus.textContent = bridgeReady ? 'Detected' : 'Not detected';
+					extStatus.textContent = bridgeReady ? 'Connected to Extension' : 'Not detected';
 					extStatus.style.color = bridgeReady ? '#059669' : '#94a3b8';
 				}
 				if (details) details.style.display = ok ? 'block' : 'none';
@@ -666,7 +666,7 @@ final class ImportonBridge_Admin {
 				try {
 					var data = await apiGet('ping');
 					if (data && data.ok) {
-						setUI(true, 'Connected to WordPress — ' + (bridgeReady ? 'ready.' : 'waiting for browser extension...'), data.categories || []);
+						setUI(true, 'Connected to WordPress \u2014 ready.', data.categories || []);
 						return true;
 					}
 					setUI(false, 'Disconnected. Click Connect to start.', []);
@@ -729,10 +729,10 @@ final class ImportonBridge_Admin {
 
 					if (extensionReached) {
 						showModalSuccess();
-						setUI(true, 'Connected as ' + data.username, data.categories || []);
+						setUI(true, 'Connected to WordPress \u2014 ready.', data.categories || []);
 					} else {
 						showModalWarning();
-						setUI(true, 'Connected to WordPress — waiting for browser extension...', data.categories || []);
+						setUI(true, 'Connected to WordPress \u2014 ready.', data.categories || []);
 					}
 					return true;
 

@@ -811,6 +811,14 @@ final class ImportonBridge_Admin {
 				var data = event.data || {};
 				if (data.type === EXT_READY) {
 					bridgeReady = true;
+					if (stored(CONNECTED_KEY)) {
+						var _dot = qs('importonbridge-status-dot');
+						var _badge = qs('importonbridge-connection-badge');
+						var _st = qs('importonbridge-connection-status');
+						if (_dot) { _dot.style.background = '#22c55e'; _dot.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.2)'; }
+						if (_badge) { _badge.textContent = 'Connected'; _badge.style.color = '#059669'; }
+						if (_st) { _st.textContent = 'Connected to WordPress \u2014 ready.'; _st.style.color = '#059669'; }
+					}
 					var extStatus = qs('importonbridge-extension-status');
 					if (extStatus) {
 						extStatus.textContent = 'Connected to Extension';

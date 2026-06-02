@@ -223,7 +223,7 @@ final class ImportonBridge_Admin {
 
 				<label class="importonbridge-terms-checkbox" id="importonbridge-terms-label">
 					<input type="checkbox" id="importonbridge-terms-checkbox">
-					<span class="importonbridge-terms-text">I agree to the <a href="#" onclick="event.preventDefault();openTermsModal();">terms and conditions</a></span>
+					<span class="importonbridge-terms-text">I agree to the <a href="#" id="importonbridge-terms-link">terms and conditions</a></span>
 				</label>
 			</div>
 
@@ -312,7 +312,7 @@ final class ImportonBridge_Admin {
 
 						<label class="importonbridge-terms-checkbox" id="importonbridge-terms-label-main">
 							<input type="checkbox" id="importonbridge-terms-checkbox-main">
-							<span class="importonbridge-terms-text">I agree to the <a href="#" onclick="event.preventDefault();openTermsModal();">terms and conditions</a></span>
+							<span class="importonbridge-terms-text">I agree to the <a href="#" id="importonbridge-terms-link-main">terms and conditions</a></span>
 						</label>
 
 						<div class="importonbridge-categories-section" id="importonbridge-categories-section" style="display:none;">
@@ -360,6 +360,16 @@ final class ImportonBridge_Admin {
 				var overlay = qs('importonbridge-terms-modal-overlay');
 				if (overlay) overlay.style.display = 'flex';
 			}
+
+			qs('importonbridge-terms-link') && qs('importonbridge-terms-link').addEventListener('click', function(e) {
+				e.preventDefault();
+				openTermsModal();
+			});
+
+			qs('importonbridge-terms-link-main') && qs('importonbridge-terms-link-main').addEventListener('click', function(e) {
+				e.preventDefault();
+				openTermsModal();
+			});
 
 			qs('importonbridge-terms-close-btn') && qs('importonbridge-terms-close-btn').addEventListener('click', function() {
 				var overlay = qs('importonbridge-terms-modal-overlay');

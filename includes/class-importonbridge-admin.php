@@ -649,11 +649,13 @@ final class ImportonBridge_Admin {
 			async function notifyExtension(data) {
 				if (bridgeReady && data && data.app_password) {
 					try {
-						await postToBridge('connect_bridge', {
+						var p = {
 							wpBaseUrl: data.site_url,
 							wpUser: data.username,
 							wpAppPassword: data.app_password
-						});
+						};
+						if (data.categories) p.categories = data.categories;
+						await postToBridge('connect_bridge', p);
 					} catch (e) {}
 				}
 			}
@@ -714,6 +716,9 @@ final class ImportonBridge_Admin {
 							};
 							if (data.app_password) {
 								payload.wpAppPassword = data.app_password;
+							}
+							if (data.categories) {
+								payload.categories = data.categories;
 							}
 							await postToBridge('connect_bridge', payload);
 							extensionReached = true;

@@ -1462,6 +1462,12 @@ final class ImportonBridge_Admin {
 		return implode(
 			"\n",
 			array(
+				/* ── Custom scrollbar ──────────────────────────────────────────── */
+				'.importonbridge-shell ::-webkit-scrollbar { width: 5px; height: 5px; }',
+				'.importonbridge-shell ::-webkit-scrollbar-track { background: transparent; }',
+				'.importonbridge-shell ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #94a3b8, #64748b); border-radius: 3px; }',
+				'.importonbridge-shell ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #64748b, #475569); }',
+				'.importonbridge-shell { scrollbar-width: thin; scrollbar-color: #94a3b8 transparent; }',
 				/* Minimal Professional Design - Grayscale Only */
 				'.importonbridge-shell { --bg: #fafafa; --card: #fff; --text: #222; --text-light: #666; --border: #e0e0e0; --border-strong: #ccc; width: 100%; max-width: 100%; margin: 0; color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }',
 				'.importonbridge-wrap { width: 100%; max-width: 1200px; margin: 20px auto; clear: both; overflow: visible; padding-bottom: 120px; }',

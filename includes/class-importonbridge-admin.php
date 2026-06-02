@@ -278,7 +278,6 @@ final class ImportonBridge_Admin {
 					<div class="importonbridge-connect-header">
 						<span class="importonbridge-status-dot" id="importonbridge-status-dot"></span>
 						<span class="importonbridge-status-label" id="importonbridge-connection-badge">Disconnected</span>
-						<span class="importonbridge-category-pill" id="importonbridge-category-count">0 categories</span>
 					</div>
 
 					<div class="importonbridge-connect-body">
@@ -315,11 +314,6 @@ final class ImportonBridge_Admin {
 							<span class="importonbridge-terms-text">I agree to the <a href="#" id="importonbridge-terms-link-main">terms and conditions</a></span>
 						</label>
 
-						<div class="importonbridge-categories-section" id="importonbridge-categories-section" style="display:none;">
-							<div class="importonbridge-categories-heading">Product Categories</div>
-							<div id="importonbridge-categories-empty" class="importonbridge-empty-state">No categories found.</div>
-							<div id="importonbridge-categories-list" class="importonbridge-categories-list" style="display:none;"></div>
-						</div>
 					</div>
 
 					<div class="importonbridge-connect-footer">
@@ -344,7 +338,6 @@ final class ImportonBridge_Admin {
 			var REQ_TYPE = 'IMPORTONBRIDGE_URL_IMPORT_BRIDGE_REQUEST';
 			var RES_TYPE = 'IMPORTONBRIDGE_URL_IMPORT_BRIDGE_RESPONSE';
 			var bridgeReady = false;
-			var lastCategories = [];
 			var restoringNow = false;
 
 			function qs(id) { return document.getElementById(id); }
@@ -491,7 +484,7 @@ final class ImportonBridge_Admin {
 			qs('importonbridge-modal-ok-btn') && qs('importonbridge-modal-ok-btn').addEventListener('click', function() {
 				closeModal();
 				if (stored(CONNECTED_KEY)) {
-					setUI(true, 'Connected to WordPress \u2014 ready.', lastCategories);
+					setUI(true, 'Connected to WordPress \u2014 ready.');
 				}
 			});
 
@@ -511,41 +504,7 @@ final class ImportonBridge_Admin {
 			}
 
 			// ── UI helpers ────────────────────────────────────────────────────
-			function renderChips(cats) {
-				var list = qs('importonbridge-categories-list');
-				var empty = qs('importonbridge-categories-empty');
-				var section = qs('importonbridge-categories-section');
-				var count = qs('importonbridge-category-count');
-				var items = Array.isArray(cats) ? cats.filter(Boolean) : [];
-				if (count) count.textContent = items.length === 1 ? '1 category' : items.length + ' categories';
-				if (!list || !empty || !section) return;
-				list.innerHTML = '';
-				if (!items.length) {
-					empty.style.display = 'block';
-					list.style.display = 'none';
-					section.style.display = 'none';
-					return;
-				}
-				section.style.display = 'block';
-				empty.style.display = 'none';
-				list.style.display = 'grid';
-				items.slice(0, 12).forEach(function(c) {
-					var row = document.createElement('div');
-					row.className = 'importonbridge-category-chip';
-					var label = document.createElement('div');
-					label.className = 'importonbridge-category-chip-label';
-					label.textContent = String(c.path || c.name || 'Category #' + (c.id || 0));
-					var meta = document.createElement('div');
-					meta.className = 'importonbridge-category-chip-meta';
-					meta.textContent = 'ID ' + (Number(c.id) || 0);
-					row.appendChild(label);
-					row.appendChild(meta);
-					list.appendChild(row);
-				});
-			}
-
-			function setUI(ok, msg, cats) {
-				lastCategories = cats || [];
+			function setUI(ok, msg, _cats) {
 				var badge = qs('importonbridge-connection-badge');
 				var status = qs('importonbridge-connection-status');
 				var dot = qs('importonbridge-status-dot');
@@ -597,7 +556,6 @@ final class ImportonBridge_Admin {
 				if (termsLabel) termsLabel.style.display = ok ? 'none' : 'inline-flex';
 				if (termsLabelMain) termsLabelMain.style.display = ok ? 'none' : 'inline-flex';
 
-				renderChips(cats || []);
 				store(CONNECTED_KEY, !!ok);
 				if (ok) store(DOWNLOAD_KEY, true);
 			}
@@ -1701,7 +1659,7 @@ final class ImportonBridge_Admin {
 				'.importonbridge-connect-header { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-bottom: 1px solid #e2e8f0; }',
 				'.importonbridge-status-dot { width: 10px; height: 10px; border-radius: 50%; background: #94a3b8; flex: 0 0 auto; }',
 				'.importonbridge-status-label { font-size: 13px; font-weight: 700; color: #475569; }',
-				'.importonbridge-category-pill { margin-left: auto; font-size: 11px; font-weight: 600; color: #64748b; background: #fff; padding: 4px 10px; border-radius: 6px; border: 1px solid #e2e8f0; }',
+
 				'.importonbridge-connect-body { padding: 28px 24px 20px; text-align: center; }',
 				'.importonbridge-connect-status-text { font-size: 15px; color: #64748b; margin-bottom: 20px; font-weight: 500; }',
 				'.importonbridge-connect-info { display: grid; gap: 0; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }',
@@ -1716,14 +1674,6 @@ final class ImportonBridge_Admin {
 				'.importonbridge-connect-footer { display: flex; justify-content: center; padding: 12px 24px; background: #f8fafc; border-top: 1px solid #e2e8f0; }',
 				'.importonbridge-shell button.importonbridge-btn-text { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: none; background: none; color: #94a3b8; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 6px; transition: all 0.2s ease; }',
 				'.importonbridge-shell button.importonbridge-btn-text:hover { color: #475569; background: #f1f5f9; }',
-				/* ── Categories ───────────────────────────────────────────────── */
-				'.importonbridge-categories-section { margin-top: 4px; }',
-				'.importonbridge-categories-heading { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; text-align: left; }',
-				'.importonbridge-category-chip { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 8px; border: 1px solid #e2e8f0; background: #fff; transition: border-color 0.15s ease; }',
-				'.importonbridge-category-chip:hover { border-color: #cbd5e1; }',
-				'.importonbridge-category-chip-label { color: #0f172a; font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }',
-				'.importonbridge-category-chip-meta { color: #94a3b8; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; flex: 0 0 auto; }',
-				'.importonbridge-categories-list { display: grid; gap: 8px; }',
 				/* Pulse animation for running status */
 				'@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } }',
 				/* ── Modal ───────────────────────────────────────────────────── */

@@ -800,6 +800,8 @@ final class ImportonBridge_Admin {
 					showHero();
 					var termsH = qs('importonbridge-terms-checkbox');
 					var termsM = qs('importonbridge-terms-checkbox-main');
+					var termsLabel = qs('importonbridge-terms-label');
+					if (termsLabel) termsLabel.style.display = '';
 					if (termsH) termsH.checked = false;
 					if (termsM) termsM.checked = false;
 					syncTermsState();

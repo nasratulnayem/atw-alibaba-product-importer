@@ -59,9 +59,8 @@ The Chrome extension reads product data directly from the browser. It sends the 
 ### Chrome extension
 
 1. Download `importon-bridge-extension.zip` from [releases](https://github.com/nasratulnayem/importon-bridge/releases)
-2. Unzip to a folder
-3. Open `chrome://extensions` → enable **Developer mode** → **Load unpacked**
-4. Select the folder
+2. Open `chrome://extensions` and enable **Developer mode** (top-right)
+3. Drag and drop the zip file onto the page
 
 ### Connect
 

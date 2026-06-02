@@ -180,25 +180,25 @@ final class ImportonBridge_Admin {
 			<div class="importonbridge-modal-overlay" id="importonbridge-terms-modal-overlay" style="display:none;">
 				<div class="importonbridge-modal" style="max-width:560px;">
 					<div class="importonbridge-modal-header">
-						<div class="importonbridge-modal-icon" style="background:#f8fafc;color:#64748b;animation:none;">
+						<div class="importonbridge-modal-icon" style="background:#eff6ff;color:#2563eb;animation:none;">
 							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
 						</div>
-						<h3 style="margin:0;font-size:18px;font-weight:700;color:#111827;">Terms and Conditions</h3>
+						<h3 style="margin:0;font-size:18px;font-weight:700;color:#0f172a;">Terms and Conditions</h3>
 					</div>
 					<div class="importonbridge-modal-body" style="text-align:left;font-size:14px;line-height:1.7;color:#374151;">
-						<p>By connecting Importon Bridge to your WordPress site, you agree to the following:</p>
-						<ul style="padding-left:20px;display:grid;gap:10px;">
-							<li><strong>Authentication:</strong> Your site URL and WordPress username are used solely to authenticate with the browser companion extension.</li>
-							<li><strong>Application Passwords:</strong> A secure application password is generated for the extension. It is stored only in your browser's extension storage and can be revoked at any time from your WordPress profile.</li>
-							<li><strong>Data Transfer:</strong> Product data you import flows directly from the websites you browse to your WordPress site via REST API. No data is sent to third-party servers.</li>
-							<li><strong>API Keys:</strong> Any AI provider API keys you configure (OpenAI, Gemini) are stored in your WordPress database and sent directly to the respective provider when rewriting product content.</li>
-							<li><strong>Security:</strong> Keep your API keys and application passwords confidential. Revoke them immediately if you suspect unauthorized use.</li>
-							<li><strong>GDPR:</strong> You are responsible for ensuring your use of this plugin complies with applicable data protection regulations.</li>
+						<p style="margin:0 0 16px;">By connecting Importon Bridge to your WordPress site, you agree to the following:</p>
+						<ul style="padding:0;margin:0;list-style:none;display:grid;gap:12px;">
+							<li style="padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;"><strong style="color:#1e293b;display:block;margin-bottom:3px;">Authentication</strong><span style="color:#475569;">Your site URL and WordPress username are used solely to authenticate with the browser companion extension.</span></li>
+							<li style="padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;"><strong style="color:#1e293b;display:block;margin-bottom:3px;">Application Passwords</strong><span style="color:#475569;">A secure application password is generated for the extension. It is stored only in your browser's extension storage and can be revoked at any time from your WordPress profile.</span></li>
+							<li style="padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;"><strong style="color:#1e293b;display:block;margin-bottom:3px;">Data Transfer</strong><span style="color:#475569;">Product data you import flows directly from the websites you browse to your WordPress site via REST API. No data is sent to third-party servers.</span></li>
+							<li style="padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;"><strong style="color:#1e293b;display:block;margin-bottom:3px;">API Keys</strong><span style="color:#475569;">Any AI provider API keys you configure (OpenAI, Gemini) are stored in your WordPress database and sent directly to the respective provider when rewriting product content.</span></li>
+							<li style="padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;"><strong style="color:#1e293b;display:block;margin-bottom:3px;">Security</strong><span style="color:#475569;">Keep your API keys and application passwords confidential. Revoke them immediately if you suspect unauthorized use.</span></li>
+							<li style="padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;"><strong style="color:#1e293b;display:block;margin-bottom:3px;">GDPR</strong><span style="color:#475569;">You are responsible for ensuring your use of this plugin complies with applicable data protection regulations.</span></li>
 						</ul>
-						<p style="margin-top:16px;color:#6b7280;font-size:13px;">By checking the agreement box and clicking Connect, you accept these terms.</p>
+						<p style="margin:16px 0 0;color:#64748b;font-size:13px;">By checking the agreement box and clicking <strong style="color:#1e293b;">Connect</strong>, you accept these terms.</p>
 					</div>
 					<div class="importonbridge-modal-footer" style="display:flex;">
-						<button type="button" class="importonbridge-btn-primary" id="importonbridge-terms-close-btn" style="animation:none;background:#111827;">Got it</button>
+						<button type="button" class="importonbridge-btn-primary" id="importonbridge-terms-close-btn" style="animation:none;background:#0f172a;padding:10px 28px;font-size:14px;font-weight:600;">Got it</button>
 					</div>
 				</div>
 			</div>
@@ -1746,13 +1746,14 @@ final class ImportonBridge_Admin {
 				'.importonbridge-step-desc { font-size: 12px; color: #6b7280; line-height: 1.4; }',
 				'.importonbridge-step--active .importonbridge-step-desc { color: #4b5563; }',
 				/* ── Terms checkbox ──────────────────────────────────────────── */
-				'.importonbridge-terms-checkbox { display: inline-flex; align-items: center; gap: 8px; }',
-				'.importonbridge-terms-checkbox { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 0; cursor: pointer; }',
-				'.importonbridge-terms-checkbox input[type="checkbox"] { width: 17px; height: 17px; border: 2px solid #cbd5e1; border-radius: 5px; cursor: pointer; accent-color: #2563eb; flex: 0 0 auto; }',
+				'.importonbridge-terms-checkbox { display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; margin: 0; }',
+				'.importonbridge-terms-checkbox:hover { background: #f1f5f9; border-color: #cbd5e1; }',
+				'.importonbridge-terms-checkbox input[type="checkbox"] { width: 18px; height: 18px; border: 2px solid #94a3b8; border-radius: 4px; cursor: pointer; accent-color: #2563eb; flex: 0 0 auto; transition: border-color 0.15s ease; }',
 				'.importonbridge-terms-checkbox input[type="checkbox"]:checked { border-color: #2563eb; }',
-				'.importonbridge-terms-text { font-size: 13px; color: #475569; user-select: none; }',
-				'.importonbridge-terms-text a { color: #2563eb; text-decoration: underline; font-weight: 500; }',
-				'.importonbridge-terms-text a:hover { color: #1d4ed8; }',
+				'.importonbridge-terms-checkbox input[type="checkbox"]:focus-visible { outline: 2px solid #93c5fd; outline-offset: 2px; }',
+				'.importonbridge-terms-text { font-size: 13px; color: #334155; user-select: none; line-height: 1.5; }',
+				'.importonbridge-terms-text a { color: #2563eb; text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; transition: border-color 0.15s ease; }',
+				'.importonbridge-terms-text a:hover { color: #1d4ed8; border-bottom-color: #1d4ed8; }',
 			)
 		);
 	}

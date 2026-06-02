@@ -276,6 +276,16 @@ final class ImportonBridge_Rest {
 			)
 		);
 
+		register_rest_route(
+			'importonbridge/v1',
+			'/disconnect',
+			array(
+				'methods'             => 'POST',
+				'permission_callback' => array( __CLASS__, 'connect_permissions_check' ),
+				'callback'            => array( __CLASS__, 'handle_disconnect' ),
+			)
+		);
+
 		// Diagnostics endpoint to help debug auth/header issues from the browser companion.
 		// Safe by default: only accessible from localhost (127.0.0.1/::1) or admins.
 		register_rest_route(
@@ -478,6 +488,22 @@ final class ImportonBridge_Rest {
 				),
 				200
 			);
+		}
+
+		public static function handle_disconnect( WP_REST_Request $request ): WP_REST_Response {
+			nocache_headers();
+			$user = wp_get_current_user();
+			if ( class_exists( 'WP_Application_Passwords' ) ) {
+				$existing = WP_Application_Passwords::get_user_application_passwords( (int) $user->ID );
+				if ( is_array( $existing ) ) {
+					foreach ( $existing as $pw ) {
+						if ( isset( $pw['name'] ) && $pw['name'] === 'importon-bridge' && isset( $pw['uuid'] ) ) {
+							WP_Application_Passwords::delete_application_password( (int) $user->ID, $pw['uuid'] );
+						}
+					}
+				}
+			}
+			return new WP_REST_Response( array( 'ok' => true ), 200 );
 		}
 
 		public static function handle_categories( WP_REST_Request $request ) {

@@ -787,18 +787,23 @@ final class ImportonBridge_Admin {
 			});
 
 			qs('importonbridge-reset-btn').addEventListener('click', function() {
-				store(DOWNLOAD_KEY, false);
-				store(CONNECTED_KEY, false);
-				try { localStorage.removeItem('importonbridge_downloaded_once_v1'); localStorage.removeItem('importonbridge_connected_once_v1'); } catch(e) {}
-				if (bridgeReady) {
-					postToBridge('disconnect_bridge', {}).catch(function() {});
-				}
-				showHero();
-				var termsH = qs('importonbridge-terms-checkbox');
-				var termsM = qs('importonbridge-terms-checkbox-main');
-				if (termsH) termsH.checked = false;
-				if (termsM) termsM.checked = false;
-				syncTermsState();
+				var btn = this;
+				btn.disabled = true;
+				btn.textContent = 'Resetting...';
+				apiPost('disconnect')['finally'](function() {
+					store(DOWNLOAD_KEY, false);
+					store(CONNECTED_KEY, false);
+					try { localStorage.removeItem('importonbridge_downloaded_once_v1'); localStorage.removeItem('importonbridge_connected_once_v1'); } catch(e) {}
+					if (bridgeReady) {
+						postToBridge('disconnect_bridge', {}).catch(function() {});
+					}
+					showHero();
+					var termsH = qs('importonbridge-terms-checkbox');
+					var termsM = qs('importonbridge-terms-checkbox-main');
+					if (termsH) termsH.checked = false;
+					if (termsM) termsM.checked = false;
+					syncTermsState();
+				});
 			});
 
 			window.addEventListener('message', function(event) {

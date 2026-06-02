@@ -827,6 +827,12 @@ final class ImportonBridge_Admin {
 					var b = qs('importonbridge-connection-badge');
 					if (b) b.textContent = 'Checking...';
 					if (s) s.textContent = 'Checking connection...';
+					var _r = qs('importonbridge-reconnect-btn');
+					var _t = qs('importonbridge-terms-label');
+					var _tm = qs('importonbridge-terms-label-main');
+					if (_r) _r.style.display = 'none';
+					if (_t) _t.style.display = 'none';
+					if (_tm) _tm.style.display = 'none';
 					restoreConnection();
 				} else {
 					setUI(false, 'Disconnected. Click Connect to start.', []);

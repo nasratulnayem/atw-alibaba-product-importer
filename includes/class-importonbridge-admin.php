@@ -811,14 +811,10 @@ final class ImportonBridge_Admin {
 				var data = event.data || {};
 				if (data.type === EXT_READY) {
 					bridgeReady = true;
-					if (!stored(DOWNLOAD_KEY)) {
-						store(DOWNLOAD_KEY, true);
-					}
-					showMain();
-					if (stored(CONNECTED_KEY)) {
-						restoreConnection();
-					} else {
-						setUI(false, 'Disconnected. Click Connect to start.', []);
+					var extStatus = qs('importonbridge-extension-status');
+					if (extStatus) {
+						extStatus.textContent = 'Connected to Extension';
+						extStatus.style.color = '#059669';
 					}
 				}
 			});

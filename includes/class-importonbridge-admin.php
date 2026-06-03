@@ -281,8 +281,6 @@ final class ImportonBridge_Admin {
 					</div>
 
 					<div class="importonbridge-connect-body">
-						<div class="importonbridge-connect-status-text" id="importonbridge-connection-status">Initializing...</div>
-
 						<div class="importonbridge-connect-info" id="importonbridge-connection-details" style="display:none;">
 							<div class="importonbridge-info-row">
 								<span class="importonbridge-info-label">Site URL</span>
@@ -506,7 +504,6 @@ final class ImportonBridge_Admin {
 			// ── UI helpers ────────────────────────────────────────────────────
 			function setUI(ok, msg, _cats) {
 				var badge = qs('importonbridge-connection-badge');
-				var status = qs('importonbridge-connection-status');
 				var dot = qs('importonbridge-status-dot');
 				var details = qs('importonbridge-connection-details');
 				var extStatus = qs('importonbridge-extension-status');
@@ -538,10 +535,6 @@ final class ImportonBridge_Admin {
 						dot.style.background = '#94a3b8';
 						dot.style.boxShadow = 'none';
 					}
-				}
-				if (status) {
-					status.textContent = msg || (ok ? 'Ready' : 'Disconnected.');
-					status.style.color = fullyConnected ? '#059669' : ok ? '#d97706' : '#64748b';
 				}
 				if (extStatus) {
 					extStatus.textContent = bridgeReady ? 'Connected' : 'Not detected';
@@ -780,10 +773,8 @@ final class ImportonBridge_Admin {
 					if (stored(CONNECTED_KEY)) {
 						var _dot = qs('importonbridge-status-dot');
 						var _badge = qs('importonbridge-connection-badge');
-						var _st = qs('importonbridge-connection-status');
 						if (_dot) { _dot.style.background = '#22c55e'; _dot.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.2)'; }
 						if (_badge) { _badge.textContent = 'Connected'; _badge.style.color = '#059669'; }
-						if (_st) { _st.textContent = 'Ready'; _st.style.color = '#059669'; }
 					}
 					var extStatus = qs('importonbridge-extension-status');
 					if (extStatus) {
@@ -798,10 +789,8 @@ final class ImportonBridge_Admin {
 			if (stored(DOWNLOAD_KEY)) {
 				showMain();
 				if (stored(CONNECTED_KEY)) {
-					var s = qs('importonbridge-connection-status');
 					var b = qs('importonbridge-connection-badge');
 					if (b) b.textContent = 'Checking...';
-					if (s) s.textContent = 'Checking connection...';
 					var _r = qs('importonbridge-reconnect-btn');
 					var _t = qs('importonbridge-terms-label');
 					var _tm = qs('importonbridge-terms-label-main');
@@ -1661,8 +1650,7 @@ final class ImportonBridge_Admin {
 				'.importonbridge-status-label { font-size: 13px; font-weight: 700; color: #475569; }',
 
 				'.importonbridge-connect-body { padding: 28px 24px 20px; text-align: center; }',
-				'.importonbridge-connect-status-text { font-size: 22px; color: #64748b; margin-bottom: 20px; font-weight: 700; }',
-				'.importonbridge-connect-info { display: grid; gap: 0; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }',
+								'.importonbridge-connect-info { display: grid; gap: 0; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }',
 				'.importonbridge-info-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; }',
 				'.importonbridge-info-row:last-child { border-bottom: none; }',
 				'.importonbridge-info-row .importonbridge-info-label { display: block; margin: 0; color: #64748b; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; flex: 0 0 auto; }',

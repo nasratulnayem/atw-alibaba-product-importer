@@ -484,7 +484,7 @@ final class ImportonBridge_Admin {
 			qs('importonbridge-modal-ok-btn') && qs('importonbridge-modal-ok-btn').addEventListener('click', function() {
 				closeModal();
 				if (stored(CONNECTED_KEY)) {
-					setUI(true, 'Connected to WordPress \u2014 ready.');
+					setUI(true, 'Ready');
 				}
 			});
 
@@ -540,11 +540,11 @@ final class ImportonBridge_Admin {
 					}
 				}
 				if (status) {
-					status.textContent = msg || (ok ? 'Connected to WordPress \u2014 ready.' : 'Disconnected.');
+					status.textContent = msg || (ok ? 'Ready' : 'Disconnected.');
 					status.style.color = fullyConnected ? '#059669' : ok ? '#d97706' : '#64748b';
 				}
 				if (extStatus) {
-					extStatus.textContent = bridgeReady ? 'Connected to Extension' : 'Not detected';
+					extStatus.textContent = bridgeReady ? 'Connected' : 'Not detected';
 					extStatus.style.color = bridgeReady ? '#059669' : '#94a3b8';
 				}
 				if (details) details.style.display = ok ? 'block' : 'none';
@@ -627,7 +627,7 @@ final class ImportonBridge_Admin {
 				try {
 					var data = await apiGet('ping');
 					if (data && data.ok) {
-						setUI(true, 'Connected to WordPress \u2014 ready.', data.categories || []);
+						setUI(true, 'Ready', data.categories || []);
 						return true;
 					}
 					setUI(false, 'Disconnected. Click Connect to start.', []);
@@ -693,10 +693,10 @@ final class ImportonBridge_Admin {
 
 					if (extensionReached) {
 						showModalSuccess();
-						setUI(true, 'Connected to WordPress \u2014 ready.', data.categories || []);
+						setUI(true, 'Ready', data.categories || []);
 					} else {
 						showModalWarning();
-						setUI(true, 'Connected to WordPress \u2014 ready.', data.categories || []);
+						setUI(true, 'Ready', data.categories || []);
 					}
 					return true;
 
@@ -783,11 +783,11 @@ final class ImportonBridge_Admin {
 						var _st = qs('importonbridge-connection-status');
 						if (_dot) { _dot.style.background = '#22c55e'; _dot.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.2)'; }
 						if (_badge) { _badge.textContent = 'Connected'; _badge.style.color = '#059669'; }
-						if (_st) { _st.textContent = 'Connected to WordPress \u2014 ready.'; _st.style.color = '#059669'; }
+						if (_st) { _st.textContent = 'Ready'; _st.style.color = '#059669'; }
 					}
 					var extStatus = qs('importonbridge-extension-status');
 					if (extStatus) {
-						extStatus.textContent = 'Connected to Extension';
+						extStatus.textContent = 'Connected';
 						extStatus.style.color = '#059669';
 					}
 				}
@@ -1661,7 +1661,7 @@ final class ImportonBridge_Admin {
 				'.importonbridge-status-label { font-size: 13px; font-weight: 700; color: #475569; }',
 
 				'.importonbridge-connect-body { padding: 28px 24px 20px; text-align: center; }',
-				'.importonbridge-connect-status-text { font-size: 15px; color: #64748b; margin-bottom: 20px; font-weight: 500; }',
+				'.importonbridge-connect-status-text { font-size: 22px; color: #64748b; margin-bottom: 20px; font-weight: 700; }',
 				'.importonbridge-connect-info { display: grid; gap: 0; text-align: left; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }',
 				'.importonbridge-info-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; }',
 				'.importonbridge-info-row:last-child { border-bottom: none; }',

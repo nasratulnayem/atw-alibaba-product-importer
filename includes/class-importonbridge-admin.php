@@ -131,7 +131,7 @@ final class ImportonBridge_Admin {
 	}
 
 	public static function enqueue_admin_assets( string $hook_suffix ): void {
-		if ( ! in_array( $hook_suffix, array( self::$hook_suffix, self::$legacy_hook_suffix, self::$url_import_hook_suffix, self::$rewriter_hook_suffix, self::$usage_hook_suffix ), true ) ) {
+		if ( ! in_array( $hook_suffix, array( self::$hook_suffix, self::$legacy_hook_suffix, self::$url_import_hook_suffix, self::$rewriter_hook_suffix, self::$usage_hook_suffix, 'importon-bridge_page_importon-bridge-pricing', 'importon-bridge_page_importon-bridge-account' ), true ) ) {
 			return;
 		}
 

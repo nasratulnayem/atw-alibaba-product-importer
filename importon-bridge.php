@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Importon Bridge
- * Description: Import products from Alibaba to WooCommerce using AI — one-click browser capture, automatic title & description rewriting via OpenAI/Gemini, bulk URL import queue with retry, logs & variation support.
+ * Description: Import products from Alibaba to WooCommerce using AI - one-click browser capture, automatic title and description rewriting via OpenAI/Gemini, bulk URL import queue with retry, logs & variation support.
  * Version: 0.2.0
  * Author: Nasratul Nayem
  * Author URI: https://nasratulnayem.github.io/

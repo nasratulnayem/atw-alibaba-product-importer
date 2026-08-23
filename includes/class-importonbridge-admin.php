@@ -117,12 +117,12 @@ final class ImportonBridge_Admin {
 			array( __CLASS__, 'render_usage_page' )
 		);
 
-		// Upgrade to Pro - always visible when not pro (Freemius Upgrade is hidden until opt-in)
+		// Single stable Upgrade (green, always visible) - hide Freemius duplicate via CSS
 		if ( ! self::is_pro_active() ) {
 			add_submenu_page(
 				'importon-bridge',
-				__( 'Upgrade to Pro', 'importon-bridge' ),
-				'<span class="importonbridge-upgrade-text">Upgrade to Pro</span>',
+				__( 'Upgrade', 'importon-bridge' ),
+				'<span class="importonbridge-upgrade-text">Upgrade</span>',
 				$cap,
 				'importonbridge-upgrade',
 				array( __CLASS__, 'render_upgrade_redirect' )
@@ -1772,9 +1772,10 @@ final class ImportonBridge_Admin {
 				'.importonbridge-shell a.importonbridge-premium-cta, .importonbridge-shell a.importonbridge-premium-cta:visited { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 9999px; background: linear-gradient(135deg, #006EFC 0%, #006EFC 45%, #3b82f6 100%) !important; color: #fff !important; font-weight: 800; font-size: 12px; letter-spacing: 0.02em; text-decoration: none !important; border: 1px solid #0052cc; box-shadow: 0 8px 20px rgba(0,110,252,0.35), inset 0 1px 0 rgba(255,255,255,0.4); }',
 				'.importonbridge-shell a.importonbridge-premium-cta:hover { background: linear-gradient(135deg, #0052cc 0%, #006EFC 100%) !important; border-color: #004bb5 !important; color: #fff !important; transform: translateY(-1px); box-shadow: 0 12px 28px rgba(0,110,252,0.3); }',
 				'.importonbridge-premium-note { margin-top: 12px; font-size: 10px; color: var(--text-dim); }',
-				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] { display: block !important; margin: 16px 12px 12px !important; padding: 9px 12px !important; background: #006EFC !important; color: #fff !important; border-radius: 4px; text-align: center; font-weight: 700; font-size: 13px; line-height: 1.2; box-shadow: none; border: none !important; letter-spacing: 0.01em; }',
-				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"]:hover { background: #0052cc !important; color: #fff !important; }',
+												'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] { display: block !important; margin: 12px 12px 8px !important; padding: 7px 12px !important; background: #00a32a !important; color: #fff !important; border-radius: 3px; text-align: center; font-weight: 600; font-size: 13px; line-height: 1.3; box-shadow: none; border: none !important; }',
+				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"]:hover { background: #008a20 !important; color: #fff !important; }',
 				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] .importonbridge-upgrade-text { color: #fff !important; }',
+				'#adminmenu .wp-submenu a[href*="page=importon-bridge-pricing"] { display: none !important; }',
 				'.importonbridge-menu-premium { display: inline !important; margin-left: 6px !important; padding: 0 !important; font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0 !important; text-transform: none !important; background: none !important; background-color: transparent !important; color: #006EFC !important; border: none !important; box-shadow: none !important; text-shadow: none !important; vertical-align: baseline !important; }',
 				'@media (max-width: 600px) { .importonbridge-premium-features { grid-template-columns: 1fr; } .importonbridge-premium-card { padding: 28px 20px; } }',
 				'.importonbridge-terms-checkbox input[type="checkbox"]:checked { border-color: var(--text); }',

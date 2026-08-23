@@ -84,7 +84,7 @@ final class ImportonBridge_Admin {
 		self::$url_import_hook_suffix = (string) add_submenu_page(
 			'importon-bridge',
 			__( 'URL Import', 'importon-bridge' ),
-			__( 'URL Import', 'importon-bridge' ),
+			__( 'URL Import', 'importon-bridge' ) . ' <span class="importonbridge-menu-premium">Premium</span>',
 			$cap,
 			'importonbridge-url-import',
 			array( __CLASS__, 'render_url_import_page' )
@@ -116,6 +116,18 @@ final class ImportonBridge_Admin {
 			'importonbridge-usage',
 			array( __CLASS__, 'render_usage_page' )
 		);
+
+		// Upgrade to Pro - prominent CTA at bottom of menu
+		if ( ! self::is_pro_active() ) {
+			add_submenu_page(
+				'importon-bridge',
+				__( 'Upgrade to Pro', 'importon-bridge' ),
+				'<span class="importonbridge-upgrade-text">Upgrade to Pro →</span>',
+				$cap,
+				'importonbridge-upgrade',
+				array( __CLASS__, 'render_upgrade_redirect' )
+			);
+		}
 	}
 
 	public static function enqueue_admin_assets( string $hook_suffix ): void {
@@ -168,7 +180,7 @@ final class ImportonBridge_Admin {
 
 		$site_url     = rtrim( home_url( '/' ), '/' );
 		$current_user = wp_get_current_user();
-		$download_url = 'https://github.com/nasratulnayem/importon-bridge/releases/download/v0.1.0/importon-bridge-extension.zip';
+		$download_url = 'https://github.com/nasratulnayem/importon-bridge/releases/download/v0.2.0/importon-bridge-extension.zip';
 		$rest_nonce   = wp_create_nonce( 'wp_rest' );
 		$rest_url     = rest_url( 'importonbridge/v1/' );
 
@@ -1144,6 +1156,8 @@ final class ImportonBridge_Admin {
 				</div>
 			</div>
 
+			<?php $is_locked = ! self::is_pro_active(); ?>
+			<?php if ( $is_locked ) : ?><div class="importonbridge-locked-wrapper importonbridge-locked"><?php endif; ?>
 			<div class="importonbridge-grid importonbridge-grid--import">
 				<div class="importonbridge-card importonbridge-card--section importonbridge-card--highlight">
 					<div class="importonbridge-card-head">
@@ -1246,9 +1260,34 @@ final class ImportonBridge_Admin {
 					</div>
 				</div>
 			</div>
-		</div>
+
+			<?php if ( $is_locked ) : ?>
+			<div class="importonbridge-premium-overlay">
+				<div class="importonbridge-premium-card">
+					<div class="importonbridge-premium-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> PREMIUM FEATURE</div>
+					<div class="importonbridge-premium-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1"/></svg></div>
+					<h3>Unlock <span>Batch URL Import</span></h3>
+					<p>Queue unlimited Alibaba product URLs, run them with retry & logs — built for serious dropshippers. Upgrade to Pro to unlock this workspace.</p>
+					<div class="importonbridge-premium-features">
+						<div class="importonbridge-premium-feature"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Unlimited URL queue</div>
+						<div class="importonbridge-premium-feature"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Batch & retry engine</div>
+						<div class="importonbridge-premium-feature"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Failed log & history</div>
+						<div class="importonbridge-premium-feature"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Priority support</div>
+					</div>
+					<a class="importonbridge-premium-cta" href="https://checkout.freemius.com/product/28475/plan/46909/?licenses=1&billing_cycle=annual" target="_blank" rel="noopener">Upgrade to Pro — $49/year →</a>
+					<div class="importonbridge-premium-note">14-day money-back guarantee · Freemius secure checkout</div>
+				</div>
+			</div>
+			</div>
+			<?php endif; ?>
 
 		<?php
+	}
+
+	public static function render_upgrade_redirect(): void {
+		self::assert_access();
+		wp_redirect( 'https://checkout.freemius.com/product/28475/plan/46909/?licenses=1&billing_cycle=annual' );
+		exit;
 	}
 
 	private static function assert_access(): void {
@@ -1260,6 +1299,20 @@ final class ImportonBridge_Admin {
 	private static function can_manage(): bool {
 		$cap = class_exists( 'WooCommerce' ) ? 'manage_woocommerce' : 'manage_options';
 		return current_user_can( $cap );
+	}
+
+	private static function is_pro_active(): bool {
+		if ( function_exists( 'ib_fs' ) && is_callable( array( ib_fs(), 'can_use_premium_code__premium_only' ) ) ) {
+			return (bool) ib_fs()->can_use_premium_code__premium_only();
+		}
+		if ( function_exists( 'ib_fs' ) && is_callable( array( ib_fs(), 'can_use_premium_code' ) ) ) {
+			return (bool) ib_fs()->can_use_premium_code();
+		}
+		// Backward compat if old atwi_fs still present
+		if ( function_exists( 'atwi_fs' ) && is_callable( array( atwi_fs(), 'can_use_premium_code' ) ) ) {
+			return (bool) atwi_fs()->can_use_premium_code();
+		}
+		return (bool) get_option( 'importonbridge_pro_unlocked', false );
 	}
 
 	private static function build_ai_settings_from_post( array $current, array $post ): array {
@@ -1698,6 +1751,28 @@ final class ImportonBridge_Admin {
 				'.importonbridge-terms-checkbox { display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: all 0.15s ease; margin: 0; }',
 				'.importonbridge-terms-checkbox:hover { background: var(--card); border-color: var(--text-dim); }',
 				'.importonbridge-terms-checkbox input[type="checkbox"] { width: 18px; height: 18px; border: 2px solid var(--text-faint); border-radius: 4px; cursor: pointer; accent-color: var(--text); flex: 0 0 auto; transition: border-color 0.15s ease; }',
+				/* ── URL Import Pro Lock ─────────────────────────────────────────── */
+				'.importonbridge-locked-wrapper { position: relative; }',
+				'.importonbridge-locked-wrapper.importonbridge-locked .importonbridge-grid, .importonbridge-locked-wrapper.importonbridge-locked .importonbridge-card--recent { filter: blur(0.8px); opacity: 0.92; pointer-events: none; user-select: none; }',
+				'.importonbridge-premium-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10; padding: 32px 20px; }',
+				'.importonbridge-premium-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent); }',
+				'.importonbridge-premium-card { position: relative; max-width: 520px; width: 100%; background: linear-gradient(180deg, #fff 0%, #fffbeb 100%); border: 1px solid #fed7aa; border-radius: 16px; padding: 32px 26px; text-align: center; box-shadow: 0 18px 40px rgba(234,88,12,0.12), 0 1px 0 #fff inset; overflow: hidden; }',
+				'.importonbridge-premium-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: linear-gradient(135deg, #fff 0%, #fff7ed 100%); border: 1px solid #fed7aa; color: #c2410c; font-size: 10px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(251,146,60,0.18), inset 0 1px 0 #fff; }',
+				'.importonbridge-premium-icon { width: 56px; height: 56px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: radial-gradient(120% 120% at 30% 20%, #fff7ed 0%, #ffedd5 18%, #ff8c00 58%, #ea580c 100%); color: #fff; border: 1px solid rgba(255,255,255,0.55); box-shadow: 0 10px 24px rgba(234,88,12,0.35), inset 0 1px 0 rgba(255,255,255,0.65); }',
+				'.importonbridge-premium-card h3 { margin: 0 0 8px; font-size: 16px; font-weight: 700; color: var(--text); }',
+				'.importonbridge-premium-card h3 span { color: var(--text); }',
+				'.importonbridge-premium-card p { margin: 0 0 18px; color: var(--text-dim); font-size: 12px; line-height: 1.5; }',
+				'.importonbridge-premium-features { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; margin: 0 0 20px; }',
+				'.importonbridge-premium-feature { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: #fff; border: 1px solid #ffedd5; border-radius: 8px; font-size: 11px; color: #7c2d12; font-weight: 600; box-shadow: 0 1px 0 #fff; }',
+				'.importonbridge-premium-feature svg { flex: 0 0 auto; color: #f97316; }',
+				'.importonbridge-shell a.importonbridge-premium-cta, .importonbridge-shell a.importonbridge-premium-cta:visited { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 9999px; background: linear-gradient(135deg, #ff6b00 0%, #f97316 45%, #fb923c 100%) !important; color: #fff !important; font-weight: 800; font-size: 12px; letter-spacing: 0.02em; text-decoration: none !important; border: 1px solid #ea580c; box-shadow: 0 8px 20px rgba(249,115,22,0.35), inset 0 1px 0 rgba(255,255,255,0.4); }',
+				'.importonbridge-shell a.importonbridge-premium-cta:hover { background: linear-gradient(135deg, #ea580c 0%, #f97316 100%) !important; border-color: #c2410c !important; color: #fff !important; transform: translateY(-1px); box-shadow: 0 12px 28px rgba(234,88,12,0.4); }',
+				'.importonbridge-premium-note { margin-top: 12px; font-size: 10px; color: var(--text-dim); }',
+				'.importonbridge-menu-premium { display: inline; margin-left: 6px; padding: 0; font-size: 10px; font-weight: 600; letter-spacing: 0; text-transform: none; background: none !important; color: #ff7a00 !important; border: none; box-shadow: none; text-shadow: none; vertical-align: baseline; }',
+				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] { margin: 12px 12px 8px; padding: 6px 10px !important; background: linear-gradient(135deg, #ff6b00 0%, #f97316 100%) !important; color: #fff !important; border-radius: 4px; text-align: center; font-weight: 700; font-size: 12px; line-height: 1.3; box-shadow: 0 1px 4px rgba(249,115,22,0.25); }',
+				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"]:hover { background: linear-gradient(135deg, #ea580c 0%, #ff6b00 100%) !important; color: #fff !important; }',
+				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] .importonbridge-upgrade-text { color: #fff !important; }',
+				'@media (max-width: 600px) { .importonbridge-premium-features { grid-template-columns: 1fr; } .importonbridge-premium-card { padding: 28px 20px; } }',
 				'.importonbridge-terms-checkbox input[type="checkbox"]:checked { border-color: var(--text); }',
 				'.importonbridge-terms-checkbox input[type="checkbox"]:focus-visible { outline: 2px solid var(--text-faint); outline-offset: 2px; }',
 				'.importonbridge-terms-text { font-size: 11px; color: var(--text); user-select: none; line-height: 1.5; font-family: var(--mono); }',

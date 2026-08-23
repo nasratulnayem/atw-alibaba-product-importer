@@ -4,7 +4,7 @@ Tags: woocommerce, import, product importer, browser companion, alibaba
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,11 @@ Import run logs are stored in the WordPress uploads directory and can be reviewe
 3. AI rewrite settings and usage panels.
 
 == Changelog ==
+
+= 0.2.0 =
+* Freemius SDK integration (ib_fs) with 7-day trial & monthly billing support.
+* URL Import now Premium-locked with high-tech upsell & Upgrade to Pro sidebar button.
+* Fixed extension download URL and premium branding.
 
 = 0.1.0 =
 * Initial release.

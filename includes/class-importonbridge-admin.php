@@ -129,10 +129,6 @@ final class ImportonBridge_Admin {
 		wp_enqueue_style( 'importonbridge_admin' );
 		wp_add_inline_style( 'importonbridge_admin', self::get_common_admin_css() );
 
-		// Manual Most Popular badge for Growth 5 Sites (Freemius has no dashboard edit here)
-		if ( 'importon-bridge-pricing' === $hook_suffix || 'importon-bridge_page_importon-bridge-pricing' === $hook_suffix ) {
-			wp_add_inline_script( 'freemius-pricing', "(function(){function addBadge(){var pkgs=document.querySelectorAll('.fs-package, .fs-pricing-package, [data-package-id]');if(!pkgs.length)return false;var mid=pkgs[1]||pkgs[Math.floor(pkgs.length/2)];if(!mid||mid.querySelector('.ib-popular-badge'))return true;var b=document.createElement('div');b.className='ib-popular-badge';b.textContent='Most Popular';b.style.cssText='position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#006EFC;color:#fff;padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:0.03em;z-index:2;';mid.style.position='relative';mid.style.border='2px solid #006EFC';mid.style.boxShadow='0 4px 16px rgba(0,110,252,0.12)';mid.prepend(b);return true;}var t=0;var iv=setInterval(function(){if(addBadge()||++t>40)clearInterval(iv);},500);})();" );
-		}
 
 		if ( $hook_suffix === self::$url_import_hook_suffix ) {
 			wp_enqueue_script(

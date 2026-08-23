@@ -89,7 +89,7 @@ if ( function_exists( 'ib_fs' ) ) {
 				add_submenu_page(
 					'importon-bridge',
 					'Pricing',
-					'Upgrade',
+					'<span class="fs-submenu-item importon-bridge pricing upgrade-mode" data-fs-external-url="" data-fs-new-tab="false">Upgrade&nbsp;&nbsp;➤</span>',
 					'manage_options',
 					'importon-bridge-pricing',
 					function() {

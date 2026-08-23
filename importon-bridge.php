@@ -100,7 +100,7 @@ if ( function_exists( 'ib_fs' ) ) {
 				);
 			}
 		}
-	}, 9999 );
+	}, 1000000000 );
 	}
 	function importonbridge_fs_uninstall_cleanup() {
 		global $wpdb;

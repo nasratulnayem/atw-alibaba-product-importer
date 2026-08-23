@@ -1274,7 +1274,7 @@ final class ImportonBridge_Admin {
 						<div class="importonbridge-premium-feature"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Failed log & history</div>
 						<div class="importonbridge-premium-feature"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Priority support</div>
 					</div>
-					<a class="importonbridge-premium-cta" href="https://checkout.freemius.com/product/28475/plan/46909/?licenses=1&billing_cycle=annual" target="_blank" rel="noopener">Upgrade to Pro — $49/year →</a>
+					<a class="importonbridge-premium-cta" href="<?php echo esc_url( function_exists('ib_fs') ? ib_fs()->get_upgrade_url() : 'https://checkout.freemius.com/product/28475/plan/46909/' ); ?>" target="_blank" rel="noopener">View Plans & Start Trial →</a>
 					<div class="importonbridge-premium-note">14-day money-back guarantee · Freemius secure checkout</div>
 				</div>
 			</div>
@@ -1286,7 +1286,7 @@ final class ImportonBridge_Admin {
 
 	public static function render_upgrade_redirect(): void {
 		self::assert_access();
-		wp_redirect( 'https://checkout.freemius.com/product/28475/plan/46909/?licenses=1&billing_cycle=annual' );
+		wp_redirect( function_exists('ib_fs') ? ib_fs()->get_upgrade_url() : 'https://checkout.freemius.com/product/28475/plan/46909/' );
 		exit;
 	}
 

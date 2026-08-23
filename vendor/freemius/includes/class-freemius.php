@@ -24025,10 +24025,10 @@
                 }
             }
 
-            if ( $this->is_activation_mode() || $this->is_pending_activation() ) {
-                // If not yet opted-in/skipped, or pending activation, don't show trial.
-                return false;
-            }
+            // Patched: show trial even in activation mode (Connect) for Importon Bridge
+            // if ( $this->is_activation_mode() || $this->is_pending_activation() ) {
+            //     return false;
+            // }
 
             $last_time_trial_promotion_shown = $this->_storage->get( 'trial_promotion_shown', false );
             $was_promotion_shown_before      = ( false !== $last_time_trial_promotion_shown );

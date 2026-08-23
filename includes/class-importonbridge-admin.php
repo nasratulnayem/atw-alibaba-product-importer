@@ -122,7 +122,7 @@ final class ImportonBridge_Admin {
 			add_submenu_page(
 				'importon-bridge',
 				__( 'Upgrade to Pro', 'importon-bridge' ),
-				'<span class="importonbridge-upgrade-text">Upgrade to Pro →</span>',
+				'<span class="importonbridge-upgrade-text">Upgrade to Pro</span>',
 				$cap,
 				'importonbridge-upgrade',
 				array( __CLASS__, 'render_upgrade_redirect' )
@@ -1769,7 +1769,7 @@ final class ImportonBridge_Admin {
 				'.importonbridge-shell a.importonbridge-premium-cta:hover { background: linear-gradient(135deg, #ea580c 0%, #f97316 100%) !important; border-color: #c2410c !important; color: #fff !important; transform: translateY(-1px); box-shadow: 0 12px 28px rgba(234,88,12,0.4); }',
 				'.importonbridge-premium-note { margin-top: 12px; font-size: 10px; color: var(--text-dim); }',
 				'.importonbridge-menu-premium { display: inline; margin-left: 6px; padding: 0; font-size: 10px; font-weight: 600; letter-spacing: 0; text-transform: none; background: none !important; color: #ff7a00 !important; border: none; box-shadow: none; text-shadow: none; vertical-align: baseline; }',
-				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] { margin: 12px 12px 8px; padding: 6px 10px !important; background: linear-gradient(135deg, #ff6b00 0%, #f97316 100%) !important; color: #fff !important; border-radius: 4px; text-align: center; font-weight: 700; font-size: 12px; line-height: 1.3; box-shadow: 0 1px 4px rgba(249,115,22,0.25); }',
+				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] { display: block !important; margin: 16px 12px 12px !important; padding: 9px 12px !important; background: #ff7a00 !important; color: #fff !important; border-radius: 4px; text-align: center; font-weight: 700; font-size: 13px; line-height: 1.2; box-shadow: none; border: none !important; letter-spacing: 0.01em; }',
 				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"]:hover { background: linear-gradient(135deg, #ea580c 0%, #ff6b00 100%) !important; color: #fff !important; }',
 				'#adminmenu .wp-submenu a[href="admin.php?page=importonbridge-upgrade"] .importonbridge-upgrade-text { color: #fff !important; }',
 				'@media (max-width: 600px) { .importonbridge-premium-features { grid-template-columns: 1fr; } .importonbridge-premium-card { padding: 28px 20px; } }',

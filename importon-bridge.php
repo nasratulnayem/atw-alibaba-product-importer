@@ -57,6 +57,18 @@ if ( function_exists( 'ib_fs' ) ) {
 	if ( ! function_exists( 'atwi_fs' ) ) {
 		function atwi_fs() { return ib_fs(); }
 	}
+	// Professional uninstall handling via Freemius hook (allows tracking)
+	if ( function_exists( 'ib_fs' ) ) {
+		ib_fs()->add_action( 'after_uninstall', 'importonbridge_fs_uninstall_cleanup' );
+	}
+	function importonbridge_fs_uninstall_cleanup() {
+		global $wpdb;
+		$table = $wpdb->prefix . 'importonbridge_usage_log';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+		delete_option( 'importonbridge_ai_settings' );
+		delete_option( 'importonbridge_pro_unlocked' );
+	}
 }
 
 define( 'IMPORTONBRIDGE_VERSION', '0.2.0' );

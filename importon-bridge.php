@@ -64,6 +64,43 @@ if ( function_exists( 'ib_fs' ) ) {
 	// Professional uninstall handling via Freemius hook (allows tracking)
 	if ( function_exists( 'ib_fs' ) ) {
 		ib_fs()->add_action( 'after_uninstall', 'importonbridge_fs_uninstall_cleanup' );
+	// Force Freemius Upgrade (pricing) visible on all admin pages, even in activation mode (Connect)
+	add_filter( 'fs_is_submenu_visible', function( $visible, $id ) {
+		if ( 'pricing' === $id ) {
+			return true;
+		}
+		return $visible;
+	}, 10, 2 );
+	add_filter( 'fs_is_pricing_page_visible', '__return_true' );
+	add_action( 'admin_menu', function() {
+		if ( function_exists( 'ib_fs' ) && ! ib_fs()->can_use_premium_code__premium_only() ) {
+			global $submenu;
+			if ( empty( $submenu['importon-bridge'] ) ) {
+				return;
+			}
+			$has_pricing = false;
+			foreach ( $submenu['importon-bridge'] as $item ) {
+				if ( false !== strpos( $item[2], 'importon-bridge-pricing' ) ) {
+					$has_pricing = true;
+					break;
+				}
+			}
+			if ( ! $has_pricing ) {
+				add_submenu_page(
+					'importon-bridge',
+					'Pricing',
+					'Upgrade',
+					'manage_options',
+					'importon-bridge-pricing',
+					function() {
+						if ( function_exists( 'ib_fs' ) && is_callable( array( ib_fs(), '_pricing_page_render' ) ) ) {
+							ib_fs()->_pricing_page_render();
+						}
+					}
+				);
+			}
+		}
+	}, 9999 );
 	}
 	function importonbridge_fs_uninstall_cleanup() {
 		global $wpdb;

@@ -64,6 +64,12 @@ if ( function_exists( 'ib_fs' ) ) {
 	// Professional uninstall handling via Freemius hook (allows tracking)
 	if ( function_exists( 'ib_fs' ) ) {
 		ib_fs()->add_action( 'after_uninstall', 'importonbridge_fs_uninstall_cleanup' );
+	}
+	if ( function_exists( 'ib_fs' ) ) {
+		// Force correct icon for pricing header
+		ib_fs()->add_filter( 'plugin_icon', function( $icon ) {
+			return dirname( __FILE__ ) . '/assets/img/importon-bridge.png';
+		} );
 	// Force Freemius Upgrade (pricing) visible on all admin pages, even in activation mode (Connect)
 	add_filter( 'fs_is_submenu_visible', function( $visible, $id ) {
 		if ( 'pricing' === $id ) {

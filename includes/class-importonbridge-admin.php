@@ -67,7 +67,7 @@ final class ImportonBridge_Admin {
 			$cap,
 			'importon-bridge',
 			array( __CLASS__, 'render_page' ),
-			 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTIgMTZMMiAxMkg2VjE0SDhWNkgxMFYxNEgxMlY2SDE0VjE0SDE2VjZIMThWMTZIMjJWMjBIMlYxNloiIG9wYWNpdHk9IjAuOSIvPjxwYXRoIGQ9Ik0xMiA0TDkgN0gxMVYxMkgxM1Y3SDE1TD EyIDRaIiBmaWxsPSIjZmZmIi8+PC9zdmc+',
+			'dashicons-store',
 			56
 		);
 

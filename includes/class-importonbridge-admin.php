@@ -1975,6 +1975,18 @@ final class ImportonBridge_Admin {
 		if ( ! $screen || ( strpos( $screen->id, 'importon-bridge' ) === false && strpos( $screen->id, 'importonbridge' ) === false ) ) {
 			return;
 		}
+		// Hide other plugins notices
 		echo '<style>.notice:not(.importonbridge-notice), .updated:not(.importonbridge-notice), .error:not(.importonbridge-notice), .is-dismissible:not(.importonbridge-notice), #wpbody-content > .notice, #wpbody-content > .updated, #wpbody-content > .error { display: none !important; }</style>';
+		// Make Importon Bridge page show only one block at a time - not scrollable
+		// When not yet connected, the Freemius license box is the only thing needed.
+		// When connected as pro, hide the Freemius box that would otherwise appear below the hero.
+		if ( function_exists( 'ib_fs' ) && ib_fs()->is_registered() && ! ib_fs()->can_use_premium_code() ) {
+			// Free user not yet pro - hide the Download hero is already hidden via PHP, ensure Freemius box is visible
+			return;
+		}
+		if ( function_exists( 'ib_fs' ) && ib_fs()->is_registered() && ib_fs()->can_use_premium_code() ) {
+			// Pro user - hide the Freemius license box that would duplicate below
+			echo '<style>#fs_connect, .fs-wrapper, .fs-box { display: none !important; } .importonbridge-connect-hero { margin-bottom: 0 !important; }</style>';
+		}
 	}
 }

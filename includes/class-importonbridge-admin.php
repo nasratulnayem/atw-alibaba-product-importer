@@ -1969,4 +1969,12 @@ final class ImportonBridge_Admin {
 		<?php
 	}
 
+
+	public static function hide_external_admin_notices(): void {
+		$screen = get_current_screen();
+		if ( ! $screen || ( strpos( $screen->id, 'importon-bridge' ) === false && strpos( $screen->id, 'importonbridge' ) === false ) ) {
+			return;
+		}
+		echo '<style>.notice:not(.importonbridge-notice), .updated:not(.importonbridge-notice), .error:not(.importonbridge-notice), .is-dismissible:not(.importonbridge-notice), #wpbody-content > .notice, #wpbody-content > .updated, #wpbody-content > .error { display: none !important; }</style>';
+	}
 }

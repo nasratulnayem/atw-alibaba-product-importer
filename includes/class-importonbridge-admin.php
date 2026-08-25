@@ -81,11 +81,10 @@ final class ImportonBridge_Admin {
 			array( __CLASS__, 'render_page' )
 		);
 
-		$url_import_title = self::is_pro_active() ? __( 'URL Import', 'importon-bridge' ) : __( 'URL Import', 'importon-bridge' ) . ' <span class="importonbridge-menu-premium">Premium</span>';
 		self::$url_import_hook_suffix = (string) add_submenu_page(
 			'importon-bridge',
 			__( 'URL Import', 'importon-bridge' ),
-			$url_import_title,
+			__( 'URL Import', 'importon-bridge' ),
 			$cap,
 			'importonbridge-url-import',
 			array( __CLASS__, 'render_url_import_page' )

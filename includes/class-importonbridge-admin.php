@@ -207,7 +207,6 @@ final class ImportonBridge_Admin {
 				</div>
 			</div>
 
-			<?php if ( function_exists( "ib_fs" ) && ib_fs()->is_registered() ) : ?>
 			<div class="importonbridge-connect-hero" id="importonbridge-download-hero">
 				<div class="importonbridge-hero-icon">
 					<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -231,7 +230,6 @@ final class ImportonBridge_Admin {
 					<span class="importonbridge-terms-text">I agree to the <a href="#" id="importonbridge-terms-link">terms and conditions</a></span>
 				</label>
 			</div>
-			<?php endif; ?>
 
 			<div class="importonbridge-modal-overlay" id="importonbridge-modal-overlay" style="display:none;">
 				<div class="importonbridge-modal">
@@ -1979,29 +1977,7 @@ final class ImportonBridge_Admin {
 		echo '<style>.notice:not(.importonbridge-notice), .updated:not(.importonbridge-notice), .error:not(.importonbridge-notice), .is-dismissible:not(.importonbridge-notice), #wpbody-content > .notice, #wpbody-content > .updated, #wpbody-content > .error { display: none !important; }</style>';
 		// Make Importon Bridge page show only one block at a time - not scrollable but responsive
 		// Add layout to center content vertically without scroll
-		echo '<style>
-	/* Professional single-card - centered, not scrollable, responsive - Connect only */
-	body.toplevel_page_importon-bridge #wpcontent { padding-left: 0 !important; }
-	body.toplevel_page_importon-bridge .wrap.importonbridge-wrap {
-		min-height: calc(100vh - 32px) !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-		padding: 24px !important;
-		box-sizing: border-box !important;
-	}
-	body.toplevel_page_importon-bridge .fs-wrapper,
-	body.toplevel_page_importon-bridge #fs_connect,
-	body.toplevel_page_importon-bridge .importonbridge-connect-hero {
-		max-width: 560px !important;
-		width: 100% !important;
-		margin: auto !important;
-		display: block !important;
-	}
-	@media (max-width: 782px) {
-		body.toplevel_page_importon-bridge .wrap.importonbridge-wrap { min-height: calc(100vh - 46px) !important; padding: 12px !important; }
-	}
-	</style>';
+		echo '<style>body.toplevel_page_importon-bridge .fs-wrapper, body.toplevel_page_importon-bridge #fs_connect { max-width: 560px !important; width: 100% !important; margin: 80px auto !important; display: block !important; }</style>';
 		if ( function_exists( 'ib_fs' ) && ib_fs()->is_registered() && ! ib_fs()->can_use_premium_code() ) {
 			return;
 		}

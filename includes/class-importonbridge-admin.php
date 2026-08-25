@@ -1980,21 +1980,26 @@ final class ImportonBridge_Admin {
 		// Make Importon Bridge page show only one block at a time - not scrollable but responsive
 		// Add layout to center content vertically without scroll
 		echo '<style>
-	/* Professional single-card layout for Connect - not scrollable, responsive */
+	/* Professional single-card - centered, not scrollable, responsive - Connect only */
 	body.toplevel_page_importon-bridge #wpcontent { padding-left: 0 !important; }
-	body.toplevel_page_importon-bridge .wrap.importonbridge-wrap { padding: 24px !important; max-width: 100% !important; }
-	body.toplevel_page_importon-bridge .fs-wrapper, 
+	body.toplevel_page_importon-bridge .wrap.importonbridge-wrap {
+		min-height: calc(100vh - 32px) !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		padding: 24px !important;
+		box-sizing: border-box !important;
+	}
+	body.toplevel_page_importon-bridge .fs-wrapper,
 	body.toplevel_page_importon-bridge #fs_connect,
 	body.toplevel_page_importon-bridge .importonbridge-connect-hero {
 		max-width: 560px !important;
 		width: 100% !important;
-		margin: 24px auto !important;
+		margin: auto !important;
 		display: block !important;
 	}
-	/* Hide the duplicate empty space - keep page height auto, no 100vh */
-	body.toplevel_page_importon-bridge #wpbody-content { padding-bottom: 0 !important; }
 	@media (max-width: 782px) {
-		body.toplevel_page_importon-bridge .wrap.importonbridge-wrap { padding: 12px !important; }
+		body.toplevel_page_importon-bridge .wrap.importonbridge-wrap { min-height: calc(100vh - 46px) !important; padding: 12px !important; }
 	}
 	</style>';
 		if ( function_exists( 'ib_fs' ) && ib_fs()->is_registered() && ! ib_fs()->can_use_premium_code() ) {

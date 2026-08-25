@@ -14,6 +14,7 @@ final class ImportonBridge_Admin {
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_assets' ) );
+		add_action( 'in_admin_header', array( __CLASS__, 'hide_external_admin_notices' ), 999 );
 		add_action( 'admin_notices', array( __CLASS__, 'maybe_show_app_passwords_notice' ) );
 		add_action( 'admin_post_importonbridge_enable_app_passwords', array( __CLASS__, 'handle_enable_app_passwords' ) );
 	}

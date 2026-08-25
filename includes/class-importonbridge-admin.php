@@ -206,6 +206,7 @@ final class ImportonBridge_Admin {
 				</div>
 			</div>
 
+			<?php if ( function_exists( "ib_fs" ) && ib_fs()->is_registered() ) : ?>
 			<div class="importonbridge-connect-hero" id="importonbridge-download-hero">
 				<div class="importonbridge-hero-icon">
 					<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -229,6 +230,7 @@ final class ImportonBridge_Admin {
 					<span class="importonbridge-terms-text">I agree to the <a href="#" id="importonbridge-terms-link">terms and conditions</a></span>
 				</label>
 			</div>
+			<?php endif; ?>
 
 			<div class="importonbridge-modal-overlay" id="importonbridge-modal-overlay" style="display:none;">
 				<div class="importonbridge-modal">

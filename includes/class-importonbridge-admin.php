@@ -170,6 +170,10 @@ final class ImportonBridge_Admin {
 	public static function render_page(): void {
 		self::assert_access();
 
+		if ( function_exists( 'ib_fs' ) && ! ib_fs()->is_registered() ) {
+			return;
+		}
+
 		$site_url     = rtrim( home_url( '/' ), '/' );
 		$current_user = wp_get_current_user();
 		$download_url = 'https://github.com/nasratulnayem/importon-bridge/releases/download/v0.2.0/importon-bridge-extension.zip';
@@ -1977,11 +1981,9 @@ final class ImportonBridge_Admin {
 		echo '<style>.notice:not(.importonbridge-notice), .updated:not(.importonbridge-notice), .error:not(.importonbridge-notice), .is-dismissible:not(.importonbridge-notice), #wpbody-content > .notice, #wpbody-content > .updated, #wpbody-content > .error { display: none !important; }</style>';
 		// Make Importon Bridge page show only one block at a time - not scrollable but responsive
 		// Add layout to center content vertically without scroll
-		echo '<style>body.toplevel_page_importon-bridge .fs-wrapper, body.toplevel_page_importon-bridge #fs_connect { max-width: 560px !important; width: 100% !important; margin: 80px auto !important; display: block !important; }</style>';
-		if ( function_exists( 'ib_fs' ) && ib_fs()->is_registered() && ! ib_fs()->can_use_premium_code() ) {
-			return;
-		}
-		if ( function_exists( 'ib_fs' ) && ib_fs()->is_registered() && ib_fs()->can_use_premium_code() ) {
+		if ( function_exists( 'ib_fs' ) && ! ib_fs()->is_registered() ) {
+			echo '<style>body.toplevel_page_importon-bridge #wpbody-content { padding-top: 24px !important; } body.toplevel_page_importon-bridge .fs-wrapper, body.toplevel_page_importon-bridge #fs_connect { max-width: 620px !important; width: calc(100% - 32px) !important; margin: 24px auto 40px !important; display: block !important; } body.toplevel_page_importon-bridge #fs_connect .fs-box-container { margin-top: 0 !important; }</style>';
+		} else {
 			echo '<style>#fs_connect, .fs-wrapper, .fs-box { display: none !important; }</style>';
 		}
 	}

@@ -1288,11 +1288,19 @@ final class ImportonBridge_Admin {
 	}
 
 	private static function is_pro_active(): bool {
-		if ( function_exists( 'ib_fs' ) && is_callable( array( ib_fs(), 'can_use_premium_code__premium_only' ) ) ) {
-			return (bool) ib_fs()->can_use_premium_code__premium_only();
-		}
-		if ( function_exists( 'ib_fs' ) && is_callable( array( ib_fs(), 'can_use_premium_code' ) ) ) {
-			return (bool) ib_fs()->can_use_premium_code();
+		if ( function_exists( 'ib_fs' ) ) {
+			if ( is_callable( array( ib_fs(), 'is_trial' ) ) && ib_fs()->is_trial() ) {
+				return true;
+			}
+			if ( is_callable( array( ib_fs(), 'is_paying' ) ) && ib_fs()->is_paying() ) {
+				return true;
+			}
+			if ( is_callable( array( ib_fs(), 'can_use_premium_code__premium_only' ) ) && ib_fs()->can_use_premium_code__premium_only() ) {
+				return (bool) ib_fs()->can_use_premium_code__premium_only();
+			}
+			if ( is_callable( array( ib_fs(), 'can_use_premium_code' ) ) && ib_fs()->can_use_premium_code() ) {
+				return (bool) ib_fs()->can_use_premium_code();
+			}
 		}
 		// Backward compat if old atwi_fs still present
 		if ( function_exists( 'atwi_fs' ) && is_callable( array( atwi_fs(), 'can_use_premium_code' ) ) ) {

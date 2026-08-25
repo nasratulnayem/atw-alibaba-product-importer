@@ -1979,7 +1979,24 @@ final class ImportonBridge_Admin {
 		echo '<style>.notice:not(.importonbridge-notice), .updated:not(.importonbridge-notice), .error:not(.importonbridge-notice), .is-dismissible:not(.importonbridge-notice), #wpbody-content > .notice, #wpbody-content > .updated, #wpbody-content > .error { display: none !important; }</style>';
 		// Make Importon Bridge page show only one block at a time - not scrollable but responsive
 		// Add layout to center content vertically without scroll
-		echo '<style>body.toplevel_page_importon-bridge .fs-wrapper, body.toplevel_page_importon-bridge #fs_connect { max-width: 560px; width: 100%; margin: 0 auto !important; }</style>';
+		echo '<style>
+	/* Professional single-card layout for Connect - not scrollable, responsive */
+	body.toplevel_page_importon-bridge #wpcontent { padding-left: 0 !important; }
+	body.toplevel_page_importon-bridge .wrap.importonbridge-wrap { padding: 24px !important; max-width: 100% !important; }
+	body.toplevel_page_importon-bridge .fs-wrapper, 
+	body.toplevel_page_importon-bridge #fs_connect,
+	body.toplevel_page_importon-bridge .importonbridge-connect-hero {
+		max-width: 560px !important;
+		width: 100% !important;
+		margin: 24px auto !important;
+		display: block !important;
+	}
+	/* Hide the duplicate empty space - keep page height auto, no 100vh */
+	body.toplevel_page_importon-bridge #wpbody-content { padding-bottom: 0 !important; }
+	@media (max-width: 782px) {
+		body.toplevel_page_importon-bridge .wrap.importonbridge-wrap { padding: 12px !important; }
+	}
+	</style>';
 		if ( function_exists( 'ib_fs' ) && ib_fs()->is_registered() && ! ib_fs()->can_use_premium_code() ) {
 			return;
 		}
